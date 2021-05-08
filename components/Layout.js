@@ -3,11 +3,10 @@ import { useRouter } from 'next/router'
 import Header from './Header'
 import Footer from './Footer'
 import Showcase from './Showcase'
-import InfoBox from './InfoBox'
 import styles from '@/styles/Layout.module.css'
 
 export default function Layout({ title, keywords, description, children }) {
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <div>
@@ -19,7 +18,7 @@ export default function Layout({ title, keywords, description, children }) {
 
       <Header />
 
-      {router.pathname === '/' && <Showcase />}
+      {router.pathname === '/' && <Showcase />} {/* Add Showcase component only to the homepage*/}
 
       <div className={styles.container}>{children}</div>
       <Footer />

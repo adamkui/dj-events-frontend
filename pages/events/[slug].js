@@ -4,10 +4,27 @@ import {API_URL} from '@/config/index'
 import styles from '@/styles/Event.module.css'
 import Link from 'next/link'
 import Image from 'next/image'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {useRouter} from 'next/router'
 
 export default function EventPage({evt}) {
-  const deleteEvent = (e) => {
-    console.log('Delete')
+  const router = useRouter();
+
+  const deleteEvent =  async (e) => {
+    if (confirm('Are you sure?')) {
+      const res = await fetch(`${API_URL}/events/${evt.id}`, {
+        method: 'DELETE'
+      })
+
+      const data = await res.json();
+
+      if (!res.ok){
+        toast.error(data.message)
+      } else {
+        router.push('/events')
+      }
+    }
   }
 
   return (
@@ -28,9 +45,10 @@ export default function EventPage({evt}) {
           {evt.date} at {evt.time}
         </span>
         <h1>{evt.name}</h1>
+        <ToastContainer />
         {evt.image && (
           <div className={styles.image}>
-            <Image src={evt.image} width={960} height={600} />
+            <Image src={evt.image.formats.medium.url} width={960} height={600} />
           </div>
         )}
 
@@ -52,7 +70,7 @@ export default function EventPage({evt}) {
 }
 
 export async function getStaticPaths(){
-  const res = await fetch(`${API_URL}/api/events`)
+  const res = await fetch(`${API_URL}/events`)
   const events = await res.json()
   const paths = events.map(evt => ({
     params: {slug: evt.slug}
@@ -66,7 +84,7 @@ export async function getStaticPaths(){
 
 
 export async function getStaticProps({params:{slug}}){
-  const res = await fetch(`${API_URL}/api/events/${slug}`);
+  const res = await fetch(`${API_URL}/events?_slug=${slug}`);
   const events = await res.json();
   return {
     props: {

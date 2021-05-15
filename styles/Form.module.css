@@ -32,6 +32,10 @@
   margin-bottom: 20px;
 }
 
+.textarea {
+  resize: none;
+}
+
 @media (max-width: 600px) {
   .grid {
     grid-template-columns: 1fr;

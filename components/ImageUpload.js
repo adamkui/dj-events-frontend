@@ -4,7 +4,7 @@ import styles from '@/styles/Form.module.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export default function ImageUpload({evtId, imageUploaded}) {
+export default function ImageUpload({evtId, imageUploaded, token}) {
     const [image, setImage] = useState(null);
 
     const handleSubmit = async (e) => {
@@ -17,7 +17,10 @@ export default function ImageUpload({evtId, imageUploaded}) {
 
         const res = await fetch(`${API_URL}/upload`, {
             method: 'POST',
-            body: formData
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            body: formData,
         })
 
         if (res.ok){
